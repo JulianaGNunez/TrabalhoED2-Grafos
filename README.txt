@@ -8,6 +8,4 @@ Isto pois ficará mais fácil para você saber como utiliza-las.
 Eu estarei fazendo o algoritmo de busca em Profundidade, quando eu termina-lo talvez fique mais fácil de visualizar como devem
 ser feitos os algoritmos.
 Ainda não está pronto do menu:
-  -função remover
-  -função zerar o grafo
   -talvez em vez de escolher por números seja escolher pelas setas
