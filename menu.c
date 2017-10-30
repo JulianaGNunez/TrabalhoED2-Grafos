@@ -51,14 +51,14 @@ short int definirVizinho(def_grafo *atual, def_grafo grafo){
     def_grafo indice = grafo;
     for(i = 1; i < ind; i++, indice = indice->prox);
 
-    guia p = (*atual)->vizinho;
+    guia p = (*atual)->vizinhos;
     if (!p){
-      for(erro = 0; !(p->vizinho) && !erro; p = p->vizinho)
+      for(erro = 0; !(p->vizinhos) && !erro; p = p->vizinhos)
         if(p->referencia == indice)
           erro = 1;
       if(!erro){
-        p = p->vizinho = (guia)malloc(sizeof(struct no));
-        p->vizinho = NULL;
+        p = p->vizinhos = (guia)malloc(sizeof(struct no));
+        p->vizinhos = NULL;
         P->referencia = indice;
       }
       else
@@ -106,6 +106,26 @@ short int inserir(def_grafo *grafo){
   return repetir;
 }
 
+void removerVizinhos(guia p, def_grafo indice){
+  def_grafo original = p->referencia;
+  guia t, q;
+  for(t = NULL, q = original->vizinhos; q->referencia != indice; q = q->vizinhos) //Procura o elemento que faz referencia ao vizinho que faz referencia ao indice
+    t = q;
+  if(!t){ //q é o primeiro elemento vizinho;
+    if(q->vizinhos)
+      original->vizinhos = q->vizinhos;
+    else
+      original->vizinhos = NULL;
+  }
+  else{ //q não é o primeiro elemento vizinho
+    if(q->vizinhos)
+      t->vizinhos = q->vizinhos;
+    else
+      t->vizinhos = NULL;
+  }
+  free(q);
+}
+
 short int remover(def_grafo *grafo){
   short int resposta, ind, erro = 0;
   do{
@@ -120,16 +140,49 @@ short int remover(def_grafo *grafo){
     def_grafo indice, q;
     for(q = NULL, i = 1, i < ind; i++, q = indice)
        indice = indice->prox;
-    guia p = indice->vizinhos;
-    }
-    if(!p){
+    guia t, p; = indice->vizinhos;
 
+    for(p){ //Elemento escolhido tem vizinhos
+      removerVizinhos(p, indice);
+      t = p;
+      p = p->vizinhos;
+      free(t);
     }
 
+    if(q){ //Não é o primeiro elemento de grafo
+      if(indice->prox)
+        q->prox = indice->prox;
+      else
+        q->prox = NULL;
+    }
+    else{ //É o primeiro elemento de grafo
+      if(indice->prox)
+        (*grafo)->prox = indice->prox;
+      else
+        (*grafo)->prox = NULL;
+    }
     free(indice);
   }
 
   return resposta;
+}
+
+void limparGrafo(def_grafo *grafo){
+  def_grafo p = NULL;
+  guia q, t;
+
+  while((*grafo)){
+    for(q = (*grafo)->vizinhos; q; free(t)){
+      t = q;
+      q = q->vizinhos;
+    }
+    p = (*grafo);
+    if((*grafo)->prox)
+      (*grafo) = (*grafo)->prox;
+    else
+      (*grafo) = NULL;
+    free(p)
+  }
 }
 
 void menu(){
