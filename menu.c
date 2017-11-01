@@ -21,7 +21,7 @@ typedef struct lista{
   struct lista *prox;
   guia vizinhos;
 } *def_grafo;
-/*
+
 typedef struct listaDistancia{
 	int deOndeVeio;
 	int id;
@@ -82,7 +82,7 @@ void setDist(def_grafo grafo, int origem, int destino, dist inicioLista){
 int dijkstra(def_grafo grafo, int origem, int destino){
 	int qtd;
 	def_grafo q;
-	dist inicioDist = (dist)malloc(sizeof(struct listaDistancia));
+	dist inicioDist = (dist) malloc(sizeof(struct listaDistancia));
 	dist l;
 	dist anterior;
 
@@ -94,7 +94,7 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 	inicioDist->deOndeVeio = -1;
 	inicioDist->prox = anterior;
 	anterior=inicioDist;
-  grafo->marcado = 0;
+  	grafo->marcado = 0;
 	if(inicioDist->id == origem) inicioDist->peso = 0;
 
 	for(q=grafo->prox; q!=NULL; q=q->prox){
@@ -103,9 +103,10 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 		l->peso = infinito;
 		if(l->id == origem) l->peso = 0;
 		l->deOndeVeio = -1;
+		l->prox = NULL;
 		anterior->prox = l;
 		anterior=l;
-    q->marcado = 0;
+    	q->marcado = 0;
 	}
 
 	//PARA TESTE: mostrar listaDist
@@ -126,10 +127,11 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 	for(d=inicioDist; d!=NULL && d->id!=destino; d = d->prox){
 			//encontrando no do vizinho na listaDistancia
 	}
+	printf("\nMenor caminho: %d", d->peso);
 	return d->peso;
 }
 
-*/
+
 //================================================Fim parte Paulo=================
 
 short int mostrarGrafo(def_grafo grafo){
@@ -451,7 +453,7 @@ void menu(){
         case 4:
             printf("\n\tDijkstra:\n\tDigite origem e destino: ");
             scanf("%d %d", &o, &d);
-            //dijkstra(grafo, o, d);
+            dijkstra(grafo, o, d);
           break;
         case 5:
           //ordenacaoTopologica(grafo, indice);
