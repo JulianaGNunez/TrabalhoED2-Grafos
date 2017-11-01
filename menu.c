@@ -64,13 +64,12 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 void setDist(def_grafo grafo, int origem, int destino, listaDistancia inicioLista){
 	guia p;
 	listaDistancia d, o;
-	int valor; //valor do peso do grafo
+	int valor; //valor do peso do grafo vizinho
 	p= grafo->vizinhos;
 	
 	//para cada vizinho fazer
 	while(p){
 		valor = p->referencia->valor;
-		acha_no-lista_dist
 		
 		for(d=inicioLista; d!=NULL && d->id!=valor; d = d->prox){
 			//encontrando no do vizinho na listaDistancia
@@ -89,16 +88,31 @@ void setDist(def_grafo grafo, int origem, int destino, listaDistancia inicioList
 		//se for menor o caminho, substitui na listaDistancia
 		if(p->peso + o->peso < d->peso){
 			d->peso = p->peso + o->peso;
+			d->deOndeVeio = o->id;
 		}
+		//caminha para o proximo vizinho
+		p= p->vizinhos;
+		
 	}
 	//marca nó como visitado
 	grafo->marcado = 1;
 	
-	for(cada vizinho){
-		if(!mark){
-			setDist(vizinho);
+	//para cada vizinho faça
+	while(p){
+		//se não estiver marcado, faz o processo todo para esse vertice
+		if(!p->referencia->marcado){
+			setDist(p->referencia, origem, destino, inicioLista);
 		}
 	}
+	
+	//Retornando o menor caminho
+	for(d=inicioLista; d!=NULL && d->id!=destino; d = d->prox){
+			//encontrando no do vizinho na listaDistancia
+	}
+	
+	return d->peso;
+	
+	
 }
 
 //================================================Fim parte Paulo=================
