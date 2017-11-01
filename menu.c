@@ -26,44 +26,15 @@ typedef struct listaDistancia{
 	int deOndeVeio;
 	int id;
 	int peso;
-	listaDistancia* prox;
+	struct listaDistancia* prox;
 }*dist;
 
 
 //==============================================Parte Paulo=======================
 
-int dijkstra(def_grafo grafo, int origem, int destino){
-	int qtd;
-	def_grafo q;
-	dist inicioDist = (dist)malloc(sizeof(listaDistancia));
-	dist l;
-	dist anterior;
-
-	//Criando lista de distancias minimas
-
-	anterior = NULL;
-	inicioDist->id = q->valor;
-	inicioDist->peso = infinito;
-	inicioDist->deOndeVeio = -1;
-	inicioDist->prox = anterior;
-	anterior=inicioDist;
-
-	for(q=grafo->prox; q!=NULL; q=q->prox){
-		l =(dist) malloc(sizeof(listaDistancia));
-		l->id = q->valor;
-		l->peso = infinito;
-		l->deOndeVeio = -1;
-		anterior->prox = l;
-		anterior=l;
-	}
-
-	//chamando fun��o recursiva
-	setDist();
-}
-
-void setDist(def_grafo grafo, int origem, int destino, listaDistancia inicioLista){
+void setDist(def_grafo grafo, int origem, int destino, dist inicioLista){
 	guia p;
-	listaDistancia d, o;
+	dist d, o;
 	int valor; //valor do peso do grafo vizinho
 	p= grafo->vizinhos;
 	
@@ -105,15 +76,49 @@ void setDist(def_grafo grafo, int origem, int destino, listaDistancia inicioList
 		}
 	}
 	
-	//Retornando o menor caminho
-	for(d=inicioLista; d!=NULL && d->id!=destino; d = d->prox){
-			//encontrando no do vizinho na listaDistancia
+}
+
+
+int dijkstra(def_grafo grafo, int origem, int destino){
+	int qtd;
+	def_grafo q;
+	dist inicioDist = (dist)malloc(sizeof(struct listaDistancia));
+	dist l;
+	dist anterior;
+
+	//Criando lista de distancias minimas
+
+	anterior = NULL;
+	inicioDist->id = q->valor;
+	inicioDist->peso = infinito;
+	inicioDist->deOndeVeio = -1;
+	inicioDist->prox = anterior;
+	anterior=inicioDist;
+
+	for(q=grafo->prox; q!=NULL; q=q->prox){
+		l =(dist) malloc(sizeof(struct listaDistancia));
+		l->id = q->valor;
+		l->peso = infinito;
+		l->deOndeVeio = -1;
+		anterior->prox = l;
+		anterior=l;
 	}
 	
+	
+	
+	getch();
+
+	//chamando fun��o recursiva
+	setDist(grafo, origem, destino, inicioDist);
+	
+	//Retornando o menor caminho
+	dist d;
+	for(d=inicioDist; d!=NULL && d->id!=destino; d = d->prox){
+			//encontrando no do vizinho na listaDistancia
+	}
 	return d->peso;
-	
-	
 }
+
 
 //================================================Fim parte Paulo=================
 
