@@ -1,5 +1,6 @@
 #include<stdio.h>
 #include<conio.h>
+#define infinito 99999999;
 
 /*
   prox: Se refere aos elementos organizados na ordem que foram inseridos,
@@ -20,6 +21,60 @@ typedef struct lista{
   guia vizinhos;
 } *def_grafo;
 
+typedef struct listaDistancia{
+	int deOndeVeio;
+	int id;
+	int peso;
+	listaDistancia* prox;
+}*dist;
+
+
+//==============================================Parte Paulo=======================
+
+int dijkstra(def_grafo grafo){
+	int qtd;
+	def_grafo q;
+	dist inicioDist = (dist)malloc(sizeof(listaDistancia));
+	dist l;
+	dist anterior;
+	
+	//Criando lista de distancias minimas
+	
+	anterior = NULL;
+	inicioDist->id = q->valor;
+	inicioDist->peso = infinito;
+	inicioDist->deOndeVeio = -1;
+	inicioDist->prox = anterior;
+	anterior=inicioDist;
+	
+	for(q=grafo->prox; q!=NULL; q=q->prox){
+		l =(dist) malloc(sizeof(listaDistancia));
+		l->id = q->valor;
+		l->peso = infinito;
+		l->deOndeVeio = -1;
+		anterior->prox = l;
+		anterior=l;
+	}
+	
+	//chamando função recursiva
+	setDist();
+}
+
+void setDist(){
+	for(cada vizinho){
+		acha_no-lista_dist
+		if(<)
+		dist -> id = ele + praondevai
+	}
+	mark = 1;
+	for(cada vizinho){
+		if(!mark){
+			setDist(vizinho);
+		}
+	}
+}
+
+//================================================Fim parte Paulo=================
 
 short int mostrarGrafo(def_grafo grafo){
   short int i = 1;
