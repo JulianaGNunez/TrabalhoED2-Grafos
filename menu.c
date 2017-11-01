@@ -10,6 +10,7 @@
 */
 
 typedef struct no{
+  int peso;
   struct no *vizinhos;
   struct lista *referencia;
 } *guia;
@@ -20,7 +21,7 @@ typedef struct lista{
   struct lista *prox;
   guia vizinhos;
 } *def_grafo;
-
+/*
 typedef struct listaDistancia{
 	int deOndeVeio;
 	int id;
@@ -37,16 +38,16 @@ int dijkstra(def_grafo grafo){
 	dist inicioDist = (dist)malloc(sizeof(listaDistancia));
 	dist l;
 	dist anterior;
-	
+
 	//Criando lista de distancias minimas
-	
+
 	anterior = NULL;
 	inicioDist->id = q->valor;
 	inicioDist->peso = infinito;
 	inicioDist->deOndeVeio = -1;
 	inicioDist->prox = anterior;
 	anterior=inicioDist;
-	
+
 	for(q=grafo->prox; q!=NULL; q=q->prox){
 		l =(dist) malloc(sizeof(listaDistancia));
 		l->id = q->valor;
@@ -55,8 +56,8 @@ int dijkstra(def_grafo grafo){
 		anterior->prox = l;
 		anterior=l;
 	}
-	
-	//chamando função recursiva
+
+	//chamando funï¿½ï¿½o recursiva
 	setDist();
 }
 
@@ -73,7 +74,7 @@ void setDist(){
 		}
 	}
 }
-
+*/
 //================================================Fim parte Paulo=================
 
 short int mostrarGrafo(def_grafo grafo){
@@ -85,19 +86,19 @@ short int mostrarGrafo(def_grafo grafo){
       printf("\n\tIndice[%hd]: Elemento: %d: Vizinhos:", i, grafo->valor);
       for(p = grafo->vizinhos; p; p = p->vizinhos){
       	q = p->referencia;
-      	printf(" -> %d", q->valor);
+      	printf(" -> %d (peso: %d)", q->valor, p->peso);
 	  }
     }
   }
   else
     printf("\n\tNao ha nenhum elemento no grafo.");
-  printf("\n\tIndice %hd", i - 1);
   return i-1;
 }
 
 short int definirVizinho(def_grafo *atual, def_grafo grafo){
   short int resposta, ind, erro = 0, repetido = 0;
-  do{
+  int peso;
+  do{ //Perguntar qual o elemteo
     if(erro)
       printf("\n\tComando Invalido");
     if(repetido)
@@ -110,63 +111,77 @@ short int definirVizinho(def_grafo *atual, def_grafo grafo){
     ++erro;
     if(resposta == ind)
     	repetido = 1;
-  }while((resposta < 0 && resposta > ind) || repetido);
+  }while((resposta < 0 || resposta > ind) || repetido);
+
   if(resposta){
     short int i;
     def_grafo indice = grafo;
-    for(i = 1; i < resposta; i++, indice = indice->prox);
-    printf("\n\tval: %d", i);
-    printf("\n\tIndice: %d", indice->valor);
+    for(i = 1, erro = 0; i < resposta; i++, indice = indice->prox);
+
+    do{ //Perguntar qual o peso
+      if(erro)
+        printf("\n\tPeso Invalido");
+      printf("\n\tQual o peso da aresta entre %d e %d? (Este deve ser positivo e nao nulo)", (*atual)->valor, indice->valor);
+      printf("\n\t");
+      scanf(" %d", &peso);
+      ++erro;
+    }while(peso <= 0);
+
 
     guia p = (*atual)->vizinhos;
-    if (p){
+    if(p){ //Se o vertice atual ja possui vizinhos
       for(i = 0; (p->vizinhos) && !i; p = p->vizinhos)
         if(p->referencia == indice)
           i = 1;
       if(p->referencia == indice)
          i = 1;
+
       if(!i){
         p = p->vizinhos = (guia)malloc(sizeof(struct no));
         p->vizinhos = NULL;
         p->referencia = indice;
-        
+        p->peso = peso;
+
         //Inserir vizinho no outro elemento
         if(indice->vizinhos){
         	for(p = indice->vizinhos; (p->vizinhos); p = p->vizinhos);
-			p = p->vizinhos = (guia)malloc(sizeof(struct no));
+			    p = p->vizinhos = (guia)malloc(sizeof(struct no));
         	p->vizinhos = NULL;
-        	p->referencia = *atual;	
-		}
-		else{
-			p = indice->vizinhos = (guia)malloc(sizeof(struct no));
-     		p->vizinhos = NULL;
-      		p->referencia = *atual;
-		}
-		
+        	p->referencia = *atual;
+          p->peso = peso;
+		    }
+    		else{
+    			p = indice->vizinhos = (guia)malloc(sizeof(struct no));
+         	p->vizinhos = NULL;
+          p->referencia = *atual;
+          p->peso = peso;
+    		}
 		printf("\n\tVizinho inserido com sucesso");
-        
-      }
-      else
-        printf("\n\tO elemento %d ja esta definido como vizinho de %d", indice->valor, (*atual)->valor);
     }
-    else{
+    else
+      printf("\n\tO elemento %d ja esta definido como vizinho de %d", indice->valor, (*atual)->valor);
+    }
+    else{ //Se o vertice atual ainda nao possui vizinhos
       p = (*atual)->vizinhos = (guia)malloc(sizeof(struct no));
       p->vizinhos = NULL;
       p->referencia = indice;
+      p->peso = peso;
       printf("\n\tVizinho inserido com sucesso");
-      
+
       //Inserir vizinho no outro elemento
       if(indice->vizinhos){
       	for(p = indice->vizinhos; (p->vizinhos); p = p->vizinhos);
-		p = p->vizinhos = (guia)malloc(sizeof(struct no));
+		    p = p->vizinhos = (guia)malloc(sizeof(struct no));
        	p->vizinhos = NULL;
-       	p->referencia = *atual;	
-		}
-		else{
-			p = indice->vizinhos = (guia)malloc(sizeof(struct no));
-     		p->vizinhos = NULL;
-      		p->referencia = *atual;
-		}
+       	p->referencia = *atual;
+        p->peso = peso;
+		  }
+		  else{
+  			p = indice->vizinhos = (guia)malloc(sizeof(struct no));
+       	p->vizinhos = NULL;
+        p->referencia = *atual;
+        p->peso = peso;
+		  }
     }
   }
   return resposta;
@@ -175,7 +190,7 @@ short int definirVizinho(def_grafo *atual, def_grafo grafo){
 
 short int inserir(def_grafo *grafo){
   int valor;
-  short int repetir, erro = 0;
+  short int repetir, erro = 0, invalido = 0;
 
   printf("\n\tElemento que deseja inserir:\n\tResposta: ");
   scanf(" %d", &valor);
@@ -188,20 +203,32 @@ short int inserir(def_grafo *grafo){
   }
   else{
     def_grafo p;
-    for(p = *grafo; p->prox; p = p->prox);
-    p = p->prox = (def_grafo)malloc(sizeof(struct lista));
-    p->valor = valor;
-    p->prox = NULL;
-    p->vizinhos = NULL;
-    while(definirVizinho(&p, *grafo));
+    for(p = *grafo; p->prox; p = p->prox)
+      if (p->valor == valor)
+        invalido = 1;
+    if(!invalido){
+      p = p->prox = (def_grafo)malloc(sizeof(struct lista));
+      p->valor = valor;
+      p->prox = NULL;
+      p->vizinhos = NULL;
+      while(definirVizinho(&p, *grafo));
+    }
   }
-  do{
-    if(erro)
+  if(!invalido){
+    do{
+      if(erro)
       printf("\n\tComando Invalido");
-    printf("\n\tDeseja inserir mais um elemento? [0]Nao [1]Sim\n\t");
-    scanf(" %hd", &repetir);
-    ++erro;
-  }while(repetir != 0 && repetir != 1);
+      printf("\n\tDeseja inserir mais um elemento? [0]Nao [1]Sim\n\t");
+      scanf(" %hd", &repetir);
+      ++erro;
+    }while(repetir != 0 && repetir != 1);
+    if(repetir)
+      system("cls");
+  }
+  else{
+    printf("Um elemento com este mesmo valor ja¡ foi inserido!");
+    repetir = 1;
+  }
   return repetir;
 }
 
@@ -232,13 +259,14 @@ short int remover(def_grafo *grafo){
       printf("\n\tComando Invalido");
     printf("\n\tQue elemento deseja remover?\n\tIndice[0]: Nenhum");
     ind = mostrarGrafo(*grafo);
+    printf("\n\t");
     scanf(" %hd", &resposta);
     ++erro;
-  }while(resposta < 0 && resposta > ind);
+  }while(resposta < 0 || resposta > ind);
   if(resposta){
     def_grafo indice, q;
-    for(q = NULL, i = 1; i < ind; i++, q = indice)
-       indice = indice->prox;
+    for(q = NULL, indice = *grafo, i = 1; i < resposta; i++, indice = indice->prox)
+      q = indice;
     guia t, p = indice->vizinhos;
 
     while(p){ //Elemento escolhido tem vizinhos
@@ -255,14 +283,23 @@ short int remover(def_grafo *grafo){
         q->prox = NULL;
     }
     else{ //Ã‰ o primeiro elemento de grafo
-      if(indice->prox)
-        (*grafo)->prox = indice->prox;
+      if((*grafo)->prox)
+        *grafo = (*grafo)->prox;
       else
-        (*grafo)->prox = NULL;
+        *grafo = NULL;
     }
     free(indice);
   }
-
+  erro = 0;
+  do{
+    if(erro)
+      printf("\n\tComando Invalido");
+    printf("\n\tDeseja remover mais um elemento? [0]Nao [1]Sim\n\t");
+    scanf(" %hd", &resposta);
+    ++erro;
+  }while(resposta != 0 && resposta != 1);
+  if(resposta)
+    system("cls");
   return resposta;
 }
 
