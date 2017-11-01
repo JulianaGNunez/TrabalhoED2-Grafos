@@ -106,11 +106,17 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 		anterior=l;
 	}
 	
+	//PARA TESTE: mostrar listaDist
+	for(l=inicioDist; l!=NULL; l=l->prox){
+        printf("\n==============\n id: %d\npeso: %d\n===============", l->id, l->peso);
+    }
+            
+	
 	
 	
 	getch();
 
-	//chamando fun��o recursiva
+	//chamando funcao recursiva
 	setDist(grafo, origem, destino, inicioDist);
 	
 	//Retornando o menor caminho
@@ -368,6 +374,7 @@ void limparGrafo(def_grafo *grafo){
 }
 
 void menu(){
+   int o, d; // origem e destino p/ dijkstra
   short int resp, erro = 0, vazio = 0, indice;
   int pesquisa;
   def_grafo grafo;
@@ -398,7 +405,9 @@ void menu(){
           //profundidade(grafo, indice);
           break;
         case 4:
-          //Dijkstra(grafo, indice);
+            printf("Digite origem e destino: ");
+            scanf("%d %d", &o, &d);
+            dijkstra(grafo, o, d);
           break;
         case 5:
           //ordenacaoTopologica(grafo, indice);
