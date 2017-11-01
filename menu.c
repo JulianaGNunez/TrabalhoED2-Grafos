@@ -21,7 +21,7 @@ typedef struct lista{
   struct lista *prox;
   guia vizinhos;
 } *def_grafo;
-
+/*
 typedef struct listaDistancia{
 	int deOndeVeio;
 	int id;
@@ -129,7 +129,7 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 	return d->peso;
 }
 
-
+*/
 //================================================Fim parte Paulo=================
 
 short int mostrarGrafo(def_grafo grafo){
@@ -142,12 +142,53 @@ short int mostrarGrafo(def_grafo grafo){
       for(p = grafo->vizinhos; p; p = p->vizinhos){
       	q = p->referencia;
       	printf(" -> %d (peso: %d)", q->valor, p->peso);
-	  }
+	    }
     }
   }
   else
     printf("\n\tNao ha nenhum elemento no grafo.");
   return i-1;
+}
+
+void profundidade(def_grafo atual, int *cont){
+  guia p;
+  def_grafo q;
+  ++*cont;
+  printf("%d --> ", atual->valor);
+  if(!(*cont % 5))
+    printf("\n\t--> ");
+  atual->marcado = 1;
+  for(p = atual->vizinhos; p; p = p->vizinhos) {
+    q = p->referencia;
+    if(!(q->marcado)){
+      profundidade(q, &(*cont));
+    }
+  }
+}
+
+void profundidadeMenu(def_grafo grafo){
+  short int resposta, ind, erro = 0, i;
+  int cont;
+  def_grafo p, inicio;
+  do{ //Perguntar qual o vertice inicial
+    if(erro)
+      printf("\n\tComando Invalido");
+    printf("\n\tQual elemento do grafo seria a sua origem?");
+    ind = mostrarGrafo(grafo);
+    printf("\n\t");
+    scanf(" %hd", &resposta);
+    ++erro;
+  }while(resposta < 0 || resposta > ind);
+
+  for(p = grafo, i = 1; p; i++, p = p->prox){ //Setar peso inicial
+    p->marcado = 0;
+    if(i == resposta)
+      inicio = p;
+  }
+  printf("\n\tInicio da Busca:\n\tVertice: ");
+  cont = 0;
+  profundidade(inicio, &cont);
+  printf("fim");
 }
 
 short int definirVizinho(def_grafo *atual, def_grafo grafo){
@@ -281,7 +322,7 @@ short int inserir(def_grafo *grafo){
       system("cls");
   }
   else{
-    printf("Um elemento com este mesmo valor ja� foi inserido!");
+    printf("Um elemento com este mesmo valor ja foi inserido!");
     repetir = 1;
   }
   return repetir;
@@ -404,12 +445,13 @@ void menu(){
           while (remover(&grafo));
           break;
         case 3:
-          //profundidade(grafo, indice);
+          printf("\n\tBusca em Profundidade: (desconsidera os pesos do Grafo)");
+          profundidadeMenu(grafo);
           break;
         case 4:
-            printf("Digite origem e destino: ");
+            printf("\n\tDijkstra:\n\tDigite origem e destino: ");
             scanf("%d %d", &o, &d);
-            dijkstra(grafo, o, d);
+            //dijkstra(grafo, o, d);
           break;
         case 5:
           //ordenacaoTopologica(grafo, indice);
