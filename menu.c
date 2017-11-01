@@ -37,23 +37,27 @@ void setDist(def_grafo grafo, int origem, int destino, dist inicioLista){
 	dist d, o;
 	int valor; //valor do peso do grafo vizinho
 	p= grafo->vizinhos;
-
 	//para cada vizinho fazer
 	while(p){
+
 		valor = p->referencia->valor;
 
 		for(d=inicioLista; d!=NULL && d->id!=valor; d = d->prox){
 			//encontrando no do vizinho na listaDistancia
 		}
-		for(o=inicioLista; o!=NULL && o->id!=grafo->valor; d = d->prox){
+
+		for(o=inicioLista; o!=NULL && o->id!=grafo->valor; o = o->prox){
 			//encontrando no da origem na listaDistancia
 		}
 
-		//Caso ele n�o encontre, n�o existe
+		//Caso ele nao encontre, nao existe
 		if(d==NULL || o==NULL){
 			printf("\n setDist() Falhou!");
+			if(d==NULL) printf("D deu problema");
+			if(o==NULL) printf("O deu problema");
 			return;
 		}
+
 
 
 		//se for menor o caminho, substitui na listaDistancia
@@ -61,6 +65,7 @@ void setDist(def_grafo grafo, int origem, int destino, dist inicioLista){
 			d->peso = p->peso + o->peso;
 			d->deOndeVeio = o->id;
 		}
+
 		//caminha para o proximo vizinho
 		p= p->vizinhos;
 
@@ -69,11 +74,13 @@ void setDist(def_grafo grafo, int origem, int destino, dist inicioLista){
 	grafo->marcado = 1;
 
 	//para cada vizinho fa�a
+	p = grafo->vizinhos;
 	while(p){
-		//se n�o estiver marcado, faz o processo todo para esse vertice
-		if(!p->referencia->marcado){
-			setDist(p->referencia, origem, destino, inicioLista);
+		//se nao estiver marcado, faz o processo todo para esse vertice
+		if(p->referencia->marcado!=1){
+			setDist(p->referencia, p->referencia->valor, destino, inicioLista);
 		}
+		p = p->vizinhos;
 	}
 
 }
@@ -108,16 +115,13 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 		anterior=l;
     	q->marcado = 0;
 	}
-
-	//PARA TESTE: mostrar listaDist
-	for(l=inicioDist; l!=NULL; l=l->prox){
-        printf("\n==============\n id: %d\npeso: %d\n===============", l->id, l->peso);
-    }
-
-
-
-
-	getch();
+	
+	//grafo vira o origem:
+	q = grafo;
+	for(q=grafo; q->valor!=origem || q == NULL; q=q->prox){
+	}
+	grafo = q;
+	
 
 	//chamando funcao recursiva
 	setDist(grafo, origem, destino, inicioDist);
@@ -127,7 +131,14 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 	for(d=inicioDist; d!=NULL && d->id!=destino; d = d->prox){
 			//encontrando no do vizinho na listaDistancia
 	}
-	printf("\nMenor caminho: %d", d->peso);
+	//PARA TESTE: mostrar listaDist
+	/*printf("\nLista depois de aplicar metodo: \n");
+	for(l=inicioDist; l!=NULL; l=l->prox){
+        printf("\n==============\n id: %d\npeso: %d\n===============", l->id, l->peso);
+    }
+    */
+	
+	printf("\n\t\tMenor caminho: %d", d->peso);
 	return d->peso;
 }
 
