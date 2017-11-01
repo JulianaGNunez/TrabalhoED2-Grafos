@@ -37,25 +37,25 @@ void setDist(def_grafo grafo, int origem, int destino, dist inicioLista){
 	dist d, o;
 	int valor; //valor do peso do grafo vizinho
 	p= grafo->vizinhos;
-	
+
 	//para cada vizinho fazer
 	while(p){
 		valor = p->referencia->valor;
-		
+
 		for(d=inicioLista; d!=NULL && d->id!=valor; d = d->prox){
 			//encontrando no do vizinho na listaDistancia
 		}
 		for(o=inicioLista; o!=NULL && o->id!=grafo->valor; d = d->prox){
 			//encontrando no da origem na listaDistancia
 		}
-		
-		//Caso ele não encontre, não existe
+
+		//Caso ele nï¿½o encontre, nï¿½o existe
 		if(d==NULL || o==NULL){
 			printf("\n setDist() Falhou!");
 			return;
 		}
-		
-		
+
+
 		//se for menor o caminho, substitui na listaDistancia
 		if(p->peso + o->peso < d->peso){
 			d->peso = p->peso + o->peso;
@@ -63,19 +63,19 @@ void setDist(def_grafo grafo, int origem, int destino, dist inicioLista){
 		}
 		//caminha para o proximo vizinho
 		p= p->vizinhos;
-		
+
 	}
-	//marca nó como visitado
+	//marca nï¿½ como visitado
 	grafo->marcado = 1;
-	
-	//para cada vizinho faça
+
+	//para cada vizinho faï¿½a
 	while(p){
-		//se não estiver marcado, faz o processo todo para esse vertice
+		//se nï¿½o estiver marcado, faz o processo todo para esse vertice
 		if(!p->referencia->marcado){
 			setDist(p->referencia, origem, destino, inicioLista);
 		}
 	}
-	
+
 }
 
 
@@ -89,11 +89,12 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 	//Criando lista de distancias minimas
 
 	anterior = NULL;
-	inicioDist->id = q->valor;
+	inicioDist->id = grafo->valor;
 	inicioDist->peso = infinito;
 	inicioDist->deOndeVeio = -1;
 	inicioDist->prox = anterior;
 	anterior=inicioDist;
+  grafo->marcado = 0;
 	if(inicioDist->id == origem) inicioDist->peso = 0;
 
 	for(q=grafo->prox; q!=NULL; q=q->prox){
@@ -104,21 +105,22 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 		l->deOndeVeio = -1;
 		anterior->prox = l;
 		anterior=l;
+    q->marcado = 0;
 	}
-	
+
 	//PARA TESTE: mostrar listaDist
 	for(l=inicioDist; l!=NULL; l=l->prox){
         printf("\n==============\n id: %d\npeso: %d\n===============", l->id, l->peso);
     }
-            
-	
-	
-	
+
+
+
+
 	getch();
 
 	//chamando funcao recursiva
 	setDist(grafo, origem, destino, inicioDist);
-	
+
 	//Retornando o menor caminho
 	dist d;
 	for(d=inicioDist; d!=NULL && d->id!=destino; d = d->prox){
@@ -279,7 +281,7 @@ short int inserir(def_grafo *grafo){
       system("cls");
   }
   else{
-    printf("Um elemento com este mesmo valor ja¡ foi inserido!");
+    printf("Um elemento com este mesmo valor jaï¿½ foi inserido!");
     repetir = 1;
   }
   return repetir;
