@@ -21,7 +21,7 @@ typedef struct lista{
   struct lista *prox;
   guia vizinhos;
 } *def_grafo;
-/*
+
 typedef struct listaDistancia{
 	int deOndeVeio;
 	int id;
@@ -32,7 +32,7 @@ typedef struct listaDistancia{
 
 //==============================================Parte Paulo=======================
 
-int dijkstra(def_grafo grafo){
+int dijkstra(def_grafo grafo, int origem, int destino){
 	int qtd;
 	def_grafo q;
 	dist inicioDist = (dist)malloc(sizeof(listaDistancia));
@@ -61,20 +61,46 @@ int dijkstra(def_grafo grafo){
 	setDist();
 }
 
-void setDist(){
-	for(cada vizinho){
+void setDist(def_grafo grafo, int origem, int destino, listaDistancia inicioLista){
+	guia p;
+	listaDistancia d, o;
+	int valor; //valor do peso do grafo
+	p= grafo->vizinhos;
+	
+	//para cada vizinho fazer
+	while(p){
+		valor = p->referencia->valor;
 		acha_no-lista_dist
-		if(<)
-		dist -> id = ele + praondevai
+		
+		for(d=inicioLista; d!=NULL && d->id!=valor; d = d->prox){
+			//encontrando no do vizinho na listaDistancia
+		}
+		for(o=inicioLista; o!=NULL && o->id!=grafo->valor; d = d->prox){
+			//encontrando no da origem na listaDistancia
+		}
+		
+		//Caso ele não encontre, não existe
+		if(d==NULL || o==NULL){
+			printf("\n setDist() Falhou!");
+			return;
+		}
+		
+		
+		//se for menor o caminho, substitui na listaDistancia
+		if(p->peso + o->peso < d->peso){
+			d->peso = p->peso + o->peso;
+		}
 	}
-	mark = 1;
+	//marca nó como visitado
+	grafo->marcado = 1;
+	
 	for(cada vizinho){
 		if(!mark){
 			setDist(vizinho);
 		}
 	}
 }
-*/
+
 //================================================Fim parte Paulo=================
 
 short int mostrarGrafo(def_grafo grafo){
@@ -236,8 +262,7 @@ void removerVizinhos(guia p, def_grafo indice){
   def_grafo original = p->referencia;
   guia t, q;
   for(t = NULL, q = original->vizinhos; q->referencia != indice; q = q->vizinhos) //Procura o elemento que faz referencia ao vizinho que faz referencia ao indice
-    t = q;
-  if(!t){ //q Ã© o primeiro elemento vizinho;
+    t = q;  if(!t){ //q Ã© o primeiro elemento vizinho;
     if(q->vizinhos)
       original->vizinhos = q->vizinhos;
     else
