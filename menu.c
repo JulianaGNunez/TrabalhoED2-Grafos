@@ -94,11 +94,13 @@ int dijkstra(def_grafo grafo, int origem, int destino){
 	inicioDist->deOndeVeio = -1;
 	inicioDist->prox = anterior;
 	anterior=inicioDist;
+	if(inicioDist->id == origem) inicioDist->peso = 0;
 
 	for(q=grafo->prox; q!=NULL; q=q->prox){
 		l =(dist) malloc(sizeof(struct listaDistancia));
 		l->id = q->valor;
 		l->peso = infinito;
+		if(l->id == origem) l->peso = 0;
 		l->deOndeVeio = -1;
 		anterior->prox = l;
 		anterior=l;
